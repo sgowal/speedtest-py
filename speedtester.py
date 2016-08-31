@@ -3,6 +3,7 @@ import time
 import os
 
 import db
+import speedtest_cli
 
 
 class Speedtester(object):
@@ -37,7 +38,7 @@ class SpeedtesterThread(threading.Thread):
       if current_time - last_measurement >= self.interval:
         print 'Running speed test...'
         last_measurement = time.time()
-        ping_ms, down_mbits, up_mbits = _RunSpeedtest()
+        ping_ms, down_mbits, up_mbits = speedtest_cli.Speedtest()
         print ping_ms, down_mbits, up_mbits
         self.db.Insert(ping_ms, down_mbits, up_mbits)
 
@@ -50,22 +51,3 @@ class SpeedtesterThread(threading.Thread):
     self.must_stop_lock.acquire()
     self.must_stop = True
     self.must_stop_lock.release()
-
-
-def _RunSpeedtest():
-  output_stdout = os.popen("speedtest-cli --simple").read()
-  if 'Cannot' in output_stdout:
-    return None
-  # Parse results (not very robust).
-  # Result:
-  # Ping: 529.084 ms
-  # Download: 0.52 Mbit/s
-  # Upload: 1.79 Mbit/s
-  output_lines = output_stdout.split('\n')
-  ping_ms = output_lines[0]
-  down_mbits = output_lines[1]
-  up_mbits = output_lines[2]
-  ping_ms = float(ping_ms.replace('Ping: ', '').replace(' ms', ''))
-  down_mbits = float(down_mbits.replace('Download: ', '').replace(' Mbits/s', ''))
-  up_mbits = float(up_mbits.replace('Upload: ', '').replace(' Mbits/s', ''))
-  return ping_ms, down_mbits, up_mbits

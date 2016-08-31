@@ -1,10 +1,3 @@
-# Install speedtest-cli
-
-```bash
-sudo apt-get install speedtest-cli  # Linux
-brew install speedtest-cli  # MacOS
-```
-
 # Run the program and exit session (for Raspberry Pi)
 
 ```bash
