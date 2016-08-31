@@ -7,8 +7,8 @@ import speedtest_cli
 
 
 class Speedtester(object):
-  def __init__(self, interval=5*60):
-    self.thread = SpeedtesterThread(interval)
+  def __init__(self, interval=5*60, db_path='local.db'):
+    self.thread = SpeedtesterThread(interval, db_path)
 
   def Start(self):
     self.thread.start()
@@ -19,16 +19,16 @@ class Speedtester(object):
 
 
 class SpeedtesterThread(threading.Thread):
-  def __init__(self, interval):
+  def __init__(self, interval, db_path):
     threading.Thread.__init__(self)
     self.must_stop = False
     self.must_stop_lock = threading.Lock()
     self.interval = interval
-    self.db = db.Database()
+    self.db = db.Database(db_path)
 
   def run(self):
     print 'Speedtest started'
-    last_measurement = time.time()
+    last_measurement = time.time() - self.interval  # Make first measurement immediately.
     self.must_stop_lock.acquire()
     while not self.must_stop:
       self.must_stop_lock.release()

@@ -8,8 +8,8 @@ _TABLE_NAME = 'stats'
 
 
 class Database(object):
-  def __init__(self):
-    self.connection = sqlite3.connect(_DB_NAME, check_same_thread=False)
+  def __init__(self, db_path=_DB_NAME):
+    self.connection = sqlite3.connect(db_path, check_same_thread=False)
     # Create table if not existing.
     if not self.CheckTableExists():
       print 'Table %s does not exist, creating it...' % _TABLE_NAME

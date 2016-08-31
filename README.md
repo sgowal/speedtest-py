@@ -1,7 +1,7 @@
 # Run the program and exit session (for Raspberry Pi)
 
 ```bash
-nohup python run.py --root html --host 10.0.0.100 --port 8080 --interval 1800 &
+nohup python run.py --root html --host 10.0.0.100 --port 8080 --interval 1800 -db database.db &
 exit
 ```
 

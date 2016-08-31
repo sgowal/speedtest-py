@@ -54,7 +54,7 @@ class ThreadedHTTPServer(SocketServer.ThreadingMixIn, BaseHTTPServer.HTTPServer)
 
 class Server(object):
 
-  def __init__(self, directory, host='localhost', port=8080, interval=5*60):
+  def __init__(self, directory, host='localhost', port=8080, interval=5*60, db_path='local.db'):
     self.host = host
     self.port = port
     # Load all content in memory.
@@ -67,10 +67,10 @@ class Server(object):
       self.content['/favicon.ico'] = fp.read()
       self.content_type['/favicon.ico'] = 'image/gif'
     # Connect to database.
-    self.db = db.Database()
+    self.db = db.Database(db_path)
     self.plotter = plotter.Plotter(self.db)
     # Speedtest thread.
-    self.speedtest = speedtester.Speedtester(interval=interval)
+    self.speedtest = speedtester.Speedtester(interval=interval, db_path=db_path)
 
   def Start(self):
     try:
@@ -90,6 +90,7 @@ if __name__ == '__main__':
   parser.add_argument("--host", metavar='IP', type=str, default='localhost', help="The server hostname.")
   parser.add_argument("--port", metavar='PORT', type=int, default=8080, help="The server port.")
   parser.add_argument("--interval", metavar='SECONDS', type=int, default=5*60, help="The interval between measurements.")
+  parser.add_argument("--db", metavar='PATH', type=str, default='local.db', help="Path to SQLITE database file.")
   args = parser.parse_args()
-  server = Server(args.root, host=args.host, port=args.port, interval=args.interval)
+  server = Server(args.root, host=args.host, port=args.port, interval=args.interval, db_path=args.db)
   server.Start()
