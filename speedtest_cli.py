@@ -1,6 +1,6 @@
 # The following is taken from the latest branch of
 # https://raw.githubusercontent.com/sivel/speedtest-cli/devel/speedtest_cli.py
-# and repurposed here.
+# and repurposed here with modifications (in particular, it does not provide https connections).
 # It is usually packaged in "apt-get install speedtest-cli" but does not provide an API
 
 # Copyright 2012-2015 Matt Martz
