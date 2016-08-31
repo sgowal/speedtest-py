@@ -38,7 +38,7 @@ class SpeedtesterThread(threading.Thread):
       if current_time - last_measurement >= self.interval:
         print 'Running speed test...'
         last_measurement = time.time()
-        ping_ms, down_mbits, up_mbits = speedtest_cli.Speedtest()
+        ping_ms, down_mbits, up_mbits = speedtest_cli.Speedtest(verbose=True)
         print ping_ms, down_mbits, up_mbits
         self.db.Insert(ping_ms, down_mbits, up_mbits)
 
