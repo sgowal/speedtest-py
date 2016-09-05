@@ -19,7 +19,14 @@ class Plotter(object):
     with _GLOBAL_LOCK:
       _, ax = _CreateFigure(width, height)
       df = self.db.Get(duration=duration, timezone_offset=timezone_offset)
-      df[['down_mbits', 'up_mbits']].plot(ax=ax)
+      df = df[['down_mbits', 'up_mbits']]
+      df.plot.area(stacked=False, ax=ax)
+      up_mbits = df.up_mbits.values[-1]
+      down_mbits = df.down_mbits.values[-1]
+      avg_up_mbits = np.mean(df.up_mbits)
+      avg_down_mbits = np.mean(df.down_mbits)
+      ax.set_title('(Latest) Download: %.1f Mbits/s - Upload: %.1f Mbits/s\n'
+                   '(Average) Download: %.1f Mbits/s - Upload: %.1f Mbits/s' % (down_mbits, up_mbits, avg_down_mbits, avg_up_mbits))
       ax.set_ylim(bottom=0)
       return _GetImageContent()
 
@@ -27,7 +34,11 @@ class Plotter(object):
     with _GLOBAL_LOCK:
       _, ax = _CreateFigure(width, height)
       df = self.db.Get(duration=duration, timezone_offset=timezone_offset)
-      df[['ping_ms']].plot(ax=ax)
+      df = df[['ping_ms']]
+      df.plot(ax=ax)
+      ping_ms = df.ping_ms.values[-1]
+      avg_ping_ms = np.mean(df.ping_ms)
+      ax.set_title('Latest: %.1f ms - Average: %.1f ms' % (ping_ms, avg_ping_ms))
       ax.set_ylim(bottom=0)
       return _GetImageContent()
 
