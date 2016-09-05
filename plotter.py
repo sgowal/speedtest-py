@@ -21,7 +21,7 @@ class Plotter(object):
       _, ax = _CreateFigure(width, height)
       df = self.db.Get(duration=duration, timezone_offset=timezone_offset)
       df = df[['down_mbits', 'up_mbits']]
-      df.plot.area(stacked=False, ax=ax)
+      df.plot(ax=ax)
       up_mbits = df.up_mbits.values[-1]
       down_mbits = df.down_mbits.values[-1]
       avg_up_mbits = np.mean(df.up_mbits)
