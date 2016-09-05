@@ -34,13 +34,14 @@ class RequestHandler(BaseHTTPServer.BaseHTTPRequestHandler):
       duration_sec = params['duration'][0]
       img_width = int(params['width'][0])
       img_height = int(params['height'][0])
+      offset_mins = int(params['offset'][0])
       self.send_response(200)
       self.send_header('Content-type', 'image/png')
       self.end_headers()
       if path == '/bandwidth':
-        self.wfile.write(self.server_handle.plotter.Bandwidth(duration_sec, img_width, img_height))
+        self.wfile.write(self.server_handle.plotter.Bandwidth(duration_sec, img_width, img_height, timezone_offset=offset_mins))
       elif path == '/ping':
-        self.wfile.write(self.server_handle.plotter.Ping(duration_sec, img_width, img_height))
+        self.wfile.write(self.server_handle.plotter.Ping(duration_sec, img_width, img_height, timezone_offset=offset_mins))
       self.wfile.close()
 
 

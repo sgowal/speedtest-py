@@ -1,16 +1,17 @@
 <html>
 <head>
   <script>
-  var current_duration = 3600;
-  var refresh_duration = 10 * 60;
+  var current_duration = 3600 * 24;  // 1 day.
+  var refresh_duration = 10 * 60;  // 10 minutes.
   var current_index = 0;
   var interval = null;
   var image_width = 800;
   var image_height = 600;
+  var timezone_offset_mins = 0;  // Offset from UTC.
 
   function update_images(duration) {
-    document.getElementById("bandwidth_img").src="bandwidth?duration=" + duration + "&height=" + image_height + "&width=" + image_width + "&index=" + current_index;
-    document.getElementById("ping_img").src="ping?duration=" + duration + "&height=" + image_height + "&width=" + image_width + "&index=" + current_index;
+    document.getElementById("bandwidth_img").src="bandwidth?duration=" + duration + "&height=" + image_height + "&width=" + image_width + "&index=" + current_index + "&offset=" + timezone_offset_mins;
+    document.getElementById("ping_img").src="ping?duration=" + duration + "&height=" + image_height + "&width=" + image_width + "&index=" + current_index + "&offset=" + timezone_offset_mins;
     current_duration = duration;
     current_index++;
   }
@@ -24,6 +25,7 @@
   }
 
   function main() {
+    timezone_offset_mins = -(new Date().getTimezoneOffset());
     update_images(current_duration);
     update_refresh(refresh_duration)
   }

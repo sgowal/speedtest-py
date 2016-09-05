@@ -15,18 +15,18 @@ class Plotter(object):
   def __init__(self, db):
     self.db = db
 
-  def Bandwidth(self, duration, width=640, height=480):
+  def Bandwidth(self, duration, width=640, height=480, timezone_offset=0):
     with _GLOBAL_LOCK:
       _, ax = _CreateFigure(width, height)
-      df = self.db.Get(duration=duration)
+      df = self.db.Get(duration=duration, timezone_offset=timezone_offset)
       df[['down_mbits', 'up_mbits']].plot(ax=ax)
       ax.set_ylim(bottom=0)
       return _GetImageContent()
 
-  def Ping(self, duration, width=640, height=480):
+  def Ping(self, duration, width=640, height=480, timezone_offset=0):
     with _GLOBAL_LOCK:
       _, ax = _CreateFigure(width, height)
-      df = self.db.Get(duration=duration)
+      df = self.db.Get(duration=duration, timezone_offset=timezone_offset)
       df[['ping_ms']].plot(ax=ax)
       ax.set_ylim(bottom=0)
       return _GetImageContent()

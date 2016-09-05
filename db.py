@@ -33,7 +33,7 @@ class Database(object):
     self.connection.commit()
     cursor.close()
 
-  def Get(self, duration=3600):
+  def Get(self, duration=3600, timezone_offset=0):
     # Get max timestamp.
     cursor = self.connection.cursor()
     cursor.execute('SELECT MAX(time) FROM {0}'.format(_TABLE_NAME))
@@ -45,7 +45,7 @@ class Database(object):
     data = []
     index = []
     for row in rows:
-      index.append(pd.Timestamp(row[0]))
+      index.append(pd.Timestamp(row[0]) + pd.Timedelta(minutes=timezone_offset))
       data.append((row[1], row[2], row[3]))
     df = pd.DataFrame(data, index=index, columns=('ping_ms', 'down_mbits', 'up_mbits'))
     cursor.close()
