@@ -45,7 +45,7 @@ class Database(object):
     data = []
     index = []
     for row in rows:
-      index.append(pd.Timestamp(row[0]) + pd.Timedelta(minutes=timezone_offset))
+      index.append(pd.Timestamp(row[0]) + pd.DateOffset(minutes=timezone_offset))
       data.append((row[1], row[2], row[3]))
     df = pd.DataFrame(data, index=index, columns=('ping_ms', 'down_mbits', 'up_mbits'))
     cursor.close()
