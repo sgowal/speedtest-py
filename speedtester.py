@@ -38,10 +38,15 @@ class SpeedtesterThread(threading.Thread):
       if current_time - last_measurement >= self.interval:
         print 'Running speed test...'
         last_measurement = time.time()
-        ping_ms, down_mbits, up_mbits = speedtest_cli.Speedtest(verbose=True)
-        print ping_ms, down_mbits, up_mbits
+        successful = False
+        while not successful:
+          try:
+            ping_ms, down_mbits, up_mbits = speedtest_cli.Speedtest(verbose=True)
+            print ping_ms, down_mbits, up_mbits
+            successful = True
+          except speedtest_cli.SpeedtestCliServerListError:
+            print 'Cannot list speedtest servers'
         self.db.Insert(ping_ms, down_mbits, up_mbits)
-
       time.sleep(1)
       self.must_stop_lock.acquire()
     self.must_stop_lock.release()
